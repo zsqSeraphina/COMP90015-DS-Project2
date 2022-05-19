@@ -1,11 +1,12 @@
 package src.interfaces;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 /**
- * Siqi Zhou
- * 903274
+ * @author Siqi Zhou
+ * student id 903274
  */
 public interface IWhiteBoardServant extends Remote{
-
+    public void initialWhiteBoard()throws RemoteException;
 }

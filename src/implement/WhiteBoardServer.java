@@ -6,6 +6,10 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class WhiteBoardServer {
 
     private static String serverIpAddress;

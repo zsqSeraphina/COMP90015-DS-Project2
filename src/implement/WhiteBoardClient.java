@@ -7,6 +7,10 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class WhiteBoardClient {
 
     private static String serverIpAddress;
@@ -34,6 +38,7 @@ public class WhiteBoardClient {
         try{
             IWhiteBoardServant server = (IWhiteBoardServant) Naming.lookup(registration);
             System.out.println("Client connected!");
+            server.initialWhiteBoard();
         }catch (MalformedURLException | NotBoundException | RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
