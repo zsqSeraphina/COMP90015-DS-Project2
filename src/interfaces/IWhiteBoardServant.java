@@ -1,5 +1,7 @@
 package src.interfaces;
 
+import src.gui.CanvasFrame;
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
@@ -8,5 +10,6 @@ import java.rmi.RemoteException;
  * student id 903274
  */
 public interface IWhiteBoardServant extends Remote{
-    public void initialWhiteBoard()throws RemoteException;
+    void initialWhiteBoard()throws RemoteException;
+    void updateUser(String userName)throws RemoteException;
 }

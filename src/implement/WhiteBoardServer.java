@@ -4,7 +4,6 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 
 /**
  * @author Siqi Zhou
@@ -16,7 +15,6 @@ public class WhiteBoardServer {
     private static int port;
 
     public static void main(String[] args) {
-        //Utils.checkArgs(args, serverIpAddress, port, "", false);
         if (2 != args.length) {
             throw new IllegalArgumentException
                     ("Please enter IP address, port");
@@ -32,7 +30,7 @@ public class WhiteBoardServer {
         }
         try {
             WhiteBoardServant servant = new WhiteBoardServant();
-            Registry registry = LocateRegistry.createRegistry(port);
+            LocateRegistry.createRegistry(port);
             Naming.rebind("rmi://" + serverIpAddress + ":" + port + "/WhiteBoardServer", servant);
             System.out.println("White Board Server Started!");
         } catch (RemoteException | MalformedURLException e) {

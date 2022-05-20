@@ -1,5 +1,6 @@
 package src.implement;
 
+import src.gui.CanvasFrame;
 import src.interfaces.IWhiteBoardServant;
 
 import java.net.MalformedURLException;
@@ -38,6 +39,7 @@ public class WhiteBoardClient {
         try{
             IWhiteBoardServant server = (IWhiteBoardServant) Naming.lookup(registration);
             System.out.println("Client connected!");
+            server.updateUser(userName);
             server.initialWhiteBoard();
         }catch (MalformedURLException | NotBoundException | RemoteException e) {
             // TODO Auto-generated catch block
