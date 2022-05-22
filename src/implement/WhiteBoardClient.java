@@ -1,8 +1,9 @@
 package src.implement;
 
-import src.gui.CanvasFrame;
+import src.gui.WhiteBoardFrame;
 import src.interfaces.IWhiteBoardServant;
 
+import javax.swing.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -18,6 +19,7 @@ public class WhiteBoardClient {
     private static int port;
     private static String userName;
     private static boolean isManager;
+    private static volatile WhiteBoardFrame board;
 
     public static void main(String[] args) {
         if (3 != args.length) {
@@ -28,7 +30,8 @@ public class WhiteBoardClient {
         try {
             serverIpAddress = args[0];
             port = Integer.parseInt(args[1]);
-            userName = args[2];
+//            userName = args[2];
+            userName = JOptionPane.showInputDialog(null, "Enter 3-8 letters user name", "Login", JOptionPane.INFORMATION_MESSAGE);
         } catch(Exception e) {
             throw new IllegalArgumentException
                     ("Error:" + e
@@ -40,7 +43,7 @@ public class WhiteBoardClient {
             IWhiteBoardServant server = (IWhiteBoardServant) Naming.lookup(registration);
             System.out.println("Client connected!");
             server.updateUser(userName);
-            server.initialWhiteBoard();
+            board = server.initialWhiteBoard();
         }catch (MalformedURLException | NotBoundException | RemoteException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
