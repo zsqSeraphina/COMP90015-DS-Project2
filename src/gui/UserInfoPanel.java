@@ -1,5 +1,6 @@
 package src.gui;
 
+import src.constants.PaintOptionType;
 import src.constants.Shape;
 
 import javax.swing.*;
@@ -16,11 +17,15 @@ public class UserInfoPanel extends JPanel {
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.isManager = isManager;
         this.userList = userList;
+        //reloadList(userList);
+    }
 
+    public void reloadList(ConcurrentHashMap<String, String> users) {
+        removeAll();
         JPanel container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setPreferredSize(new Dimension(180, 360));
-        for (String user : this.userList.keySet()) {
+        for (String user : users.keySet()) {
             JPanel wrapper = new JPanel();
             wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
             wrapper.setPreferredSize(new Dimension(180, 80));
@@ -37,6 +42,14 @@ public class UserInfoPanel extends JPanel {
             wrapper.setBorder(BorderFactory.createLineBorder(Color.black));
             container.add(wrapper);
         }
-        this.add(container);
+        add(container);
+        validate();
+        repaint();
     }
+
+    public void print() {
+        System.out.println(userList);
+    }
+
+
 }

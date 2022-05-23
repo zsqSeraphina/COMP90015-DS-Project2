@@ -32,19 +32,24 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     @Override
     public synchronized WhiteBoardFrame initialWhiteBoard() throws RemoteException {
         synchronized (this) {
-            return new WhiteBoardFrame("White Board", shapes, isManager, userList);
+            return new WhiteBoardFrame(shapes, isManager, userList);
         }
     }
 
     @Override
-    public synchronized void updateUser(String userName)throws RemoteException {
+    public synchronized ConcurrentHashMap<String, String> updateUser(String userName)throws RemoteException {
         if (userList.isEmpty()) {
             this.userList.put(userName, "Manager");
             this.isManager = true;
         } else {
             this.userList.put(userName, "User");
             this.isManager = false;
-            System.out.println(this.userList);
         }
+        return this.userList;
+    }
+
+    @Override
+    public synchronized ConcurrentHashMap<String, String> getUserList() throws RemoteException {
+        return this.userList;
     }
 }

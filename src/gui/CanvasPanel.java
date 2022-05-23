@@ -6,6 +6,8 @@ import src.constants.Shape;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

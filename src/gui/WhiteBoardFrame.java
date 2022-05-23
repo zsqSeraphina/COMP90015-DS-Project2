@@ -9,19 +9,25 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WhiteBoardFrame extends JFrame {
 
-    public WhiteBoardFrame(String title, ConcurrentHashMap<Point, Shape> shapes, boolean isManager,
+    private ConcurrentHashMap<String, String> userList;
+    private UserInfoPanel userPanel;
+    private CanvasPanel canvasPanel;
+
+    public WhiteBoardFrame(ConcurrentHashMap<Point, Shape> shapes, boolean isManager,
                            ConcurrentHashMap<String, String> userList) {
-        CanvasPanel canvasPanel = new CanvasPanel(shapes);
+        canvasPanel = new CanvasPanel(shapes);
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
+        this.userList = userList;
+
 
 
         if (isManager) {
-            this.setTitle("Manager " + title);
+            this.setTitle("Manager White Board");
             this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         } else {
-            this.setTitle("User " + title);
+            this.setTitle("User White Board");
         }
 
         MenuBar menuBar = new MenuBar();
@@ -83,10 +89,28 @@ public class WhiteBoardFrame extends JFrame {
         gbc.weighty = 1.0;
         gbc.gridx = 1;
         gbc.gridy = 0;
-        UserInfoPanel userPanel = new UserInfoPanel(isManager, userList);
+        userPanel = new UserInfoPanel(isManager, userList);
+        reloadList(userList);
         this.getContentPane().add(userPanel, gbc);
 
         this.pack();
         this.setVisible(true);
+
     }
+
+    public ConcurrentHashMap<String, String> getUserList() {
+        return userList;
+    }
+    public void setUserList(ConcurrentHashMap<String, String> userList) {
+        this.userList = userList;
+    }
+    public void reloadList(ConcurrentHashMap<String, String> userList) {
+        userPanel.reloadList(userList);
+        userPanel.updateUI();
+        revalidate();
+        repaint();
+//        this.pack();
+//        this.setVisible(true);
+    }
+
 }

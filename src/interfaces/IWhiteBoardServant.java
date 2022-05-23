@@ -4,6 +4,7 @@ import src.gui.WhiteBoardFrame;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Siqi Zhou
@@ -11,5 +12,6 @@ import java.rmi.RemoteException;
  */
 public interface IWhiteBoardServant extends Remote{
     WhiteBoardFrame initialWhiteBoard()throws RemoteException;
-    void updateUser(String userName)throws RemoteException;
+    ConcurrentHashMap<String, String> updateUser(String userName)throws RemoteException;
+    ConcurrentHashMap<String, String> getUserList() throws RemoteException;
 }
