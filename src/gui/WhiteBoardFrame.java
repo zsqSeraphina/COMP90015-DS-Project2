@@ -2,10 +2,17 @@ package src.gui;
 
 import src.constants.PaintOptionType;
 import src.constants.Shape;
+import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public class WhiteBoardFrame extends JFrame {
 
@@ -13,19 +20,47 @@ public class WhiteBoardFrame extends JFrame {
     private UserInfoPanel userPanel;
     private CanvasPanel canvasPanel;
 
-    public WhiteBoardFrame(ConcurrentHashMap<Point, Shape> shapes, boolean isManager,
-                           ConcurrentHashMap<String, String> userList) {
-        canvasPanel = new CanvasPanel(shapes);
+    public WhiteBoardFrame(ConcurrentHashMap<Point, Shape> shapes, String username,
+                           ConcurrentHashMap<String, String> userList, IWhiteBoardServant server) {
+        canvasPanel = new CanvasPanel(shapes, server);
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         this.userList = userList;
 
+        this.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        super.windowClosing(e);
+                        int closingConfirm = 0;
+                        if (!userList.get(username).equals("Manager")) {
+                            closingConfirm = JOptionPane.showConfirmDialog(null,
+                                    "You are closing the white board",
+                                    "Confirm Closing", JOptionPane.YES_NO_OPTION);
+                        } else {
+                            closingConfirm = JOptionPane.showConfirmDialog(null,
+                                    "You are ending the white board for all users",
+                                    "Confirm Closing", JOptionPane.YES_NO_OPTION);
+                        }
+
+                        if (closingConfirm == JOptionPane.YES_OPTION) {
+                            try {
+                                userList.remove(username);
+                                server.updateUserList(userList);
+                            } catch (RemoteException error) {
+                                error.printStackTrace();
+                            }
+                            System.exit(0);
+                        }
+                    }
+                }
+        );
 
 
-        if (isManager) {
+
+        if (userList.get(username).equals("Manager")) {
             this.setTitle("Manager White Board");
-            this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         } else {
             this.setTitle("User White Board");
         }
@@ -89,10 +124,11 @@ public class WhiteBoardFrame extends JFrame {
         gbc.weighty = 1.0;
         gbc.gridx = 1;
         gbc.gridy = 0;
-        userPanel = new UserInfoPanel(isManager, userList);
+        userPanel = new UserInfoPanel(username, userList, server);
         reloadList(userList);
         this.getContentPane().add(userPanel, gbc);
 
+        this.setResizable(false);
         this.pack();
         this.setVisible(true);
 
@@ -104,13 +140,21 @@ public class WhiteBoardFrame extends JFrame {
     public void setUserList(ConcurrentHashMap<String, String> userList) {
         this.userList = userList;
     }
+
     public void reloadList(ConcurrentHashMap<String, String> userList) {
-        userPanel.reloadList(userList);
-        userPanel.updateUI();
-        revalidate();
-        repaint();
-//        this.pack();
-//        this.setVisible(true);
+
+        if (!userList.equals(this.userList)) {
+//            userList.keySet().removeAll(this.userList.keySet());
+            userPanel.reloadList(userList);
+//            this.userList.putAll(userList);
+            this.userList = userList;
+            this.revalidate();
+            this.repaint();
+        }
+    }
+
+    public void reloadShapes(ConcurrentHashMap<Point, Shape> shapes) {
+        canvasPanel.setShapes(shapes);
     }
 
 }

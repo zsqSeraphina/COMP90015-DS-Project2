@@ -2,12 +2,12 @@ package src.gui;
 
 import src.constants.PaintOptionType;
 import src.constants.Shape;
+import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,16 +19,18 @@ public class CanvasPanel extends JPanel {
     private Point start;
     private Point end;
     private PaintOptionType type = PaintOptionType.LINE;
-    private final ConcurrentHashMap<Point, Shape> shapes;
+    private ConcurrentHashMap<Point, Shape> shapes;
     private Color paintColor = Color.black;
+    private IWhiteBoardServant server;
 
 
-    CanvasPanel(ConcurrentHashMap<Point, Shape> shapes) {
+    CanvasPanel(ConcurrentHashMap<Point, Shape> shapes, IWhiteBoardServant server) {
         this.setPreferredSize(new Dimension(800, 400));
         this.shapes = shapes;
         this.setLayout(null);
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.setBackground(Color.white);
+        this.server  = server;
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
@@ -77,6 +79,11 @@ public class CanvasPanel extends JPanel {
             newShape.setColor(this.paintColor);
             shapes.put(this.start, newShape);
             drawChosenShape(g, this.start, this.end, this.type, this.paintColor);
+            try {
+                server.updateShapes(this.start, newShape);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -111,6 +118,7 @@ public class CanvasPanel extends JPanel {
             JTextArea textArea = new JTextArea();
             textArea.setPreferredSize(new Dimension(end.x - start.x, end.y - start.y));
             textArea.setBackground(Color.lightGray);
+            textArea.setBounds(0, 0, end.x - start.x, end.y - start.y);
             JButton confirm = new JButton("confirm");
             confirm.setPreferredSize(new Dimension(100, 40));
             panel.add(textArea);
@@ -131,6 +139,11 @@ public class CanvasPanel extends JPanel {
                 this.remove(panel);
                 this.validate();
                 this.repaint();
+                try {
+                    server.updateShapes(start, newShape);
+                } catch (RemoteException error) {
+                    error.printStackTrace();
+                }
             });
         }
 
@@ -146,5 +159,15 @@ public class CanvasPanel extends JPanel {
     public void setPaintColor(Color color)  {
         this.paintColor = color;
     }
+
+    public ConcurrentHashMap<Point, Shape> getShapes () {
+        return this.shapes;
+    }
+    public void setShapes (ConcurrentHashMap<Point, Shape> shapes) {
+        this.shapes = shapes;
+        repaint();
+    }
+
+
 
 }

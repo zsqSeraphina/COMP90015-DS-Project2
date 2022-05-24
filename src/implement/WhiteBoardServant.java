@@ -18,7 +18,7 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
 
     @Serial
     private static final long serialVersionUID = -7231033280190281294L;
-    private final ConcurrentHashMap<String, String> userList;
+    private ConcurrentHashMap<String, String> userList;
     private final ConcurrentHashMap<Point, Shape> shapes;
     private boolean isManager;
 
@@ -30,14 +30,7 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     }
 
     @Override
-    public synchronized WhiteBoardFrame initialWhiteBoard() throws RemoteException {
-        synchronized (this) {
-            return new WhiteBoardFrame(shapes, isManager, userList);
-        }
-    }
-
-    @Override
-    public synchronized ConcurrentHashMap<String, String> updateUser(String userName)throws RemoteException {
+    public synchronized ConcurrentHashMap<String, String> addUser(String userName)throws RemoteException {
         if (userList.isEmpty()) {
             this.userList.put(userName, "Manager");
             this.isManager = true;
@@ -51,5 +44,20 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     @Override
     public synchronized ConcurrentHashMap<String, String> getUserList() throws RemoteException {
         return this.userList;
+    }
+
+    @Override
+    public ConcurrentHashMap<Point, Shape> getShapes() throws RemoteException {
+        return this.shapes;
+    }
+
+    @Override
+    public void updateShapes(Point point, Shape shape) throws RemoteException {
+        this.shapes.put(point, shape);
+    }
+
+    @Override
+    public void updateUserList(ConcurrentHashMap<String, String> userList) throws RemoteException {
+        this.userList = userList;
     }
 }

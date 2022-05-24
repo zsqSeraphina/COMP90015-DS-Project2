@@ -1,55 +1,77 @@
 package src.gui;
 
-import src.constants.PaintOptionType;
-import src.constants.Shape;
+import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserInfoPanel extends JPanel {
 
-    private final ConcurrentHashMap<String, String> userList;
-    private final boolean isManager;
+    private static ConcurrentHashMap<String, String> userList;
+    private boolean isManager = false;
+    public JPanel container = new JPanel();
+    private String username;
+    private static IWhiteBoardServant server;
 
-    UserInfoPanel(boolean isManager, ConcurrentHashMap<String, String> userList) {
+    UserInfoPanel(String username, ConcurrentHashMap<String, String> userList, IWhiteBoardServant server) {
         this.setPreferredSize(new Dimension(200,400));
         this.setBorder(BorderFactory.createLineBorder(Color.black));
-        this.isManager = isManager;
+        if (userList.get(username).equals("Manager")) {
+            this.isManager = true;
+        }
+        this.username = username;
         this.userList = userList;
-        //reloadList(userList);
+        this.server = server;
+        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
+        container.setPreferredSize(new Dimension(200, 400));
+        JScrollPane scrollContainer = new JScrollPane(container);
+        scrollContainer.setPreferredSize(new Dimension(280, 400));
+        scrollContainer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        add(scrollContainer);
+        System.out.println(userList);
+        reloadList(userList);
     }
 
     public void reloadList(ConcurrentHashMap<String, String> users) {
-        removeAll();
-        JPanel container = new JPanel();
-        container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setPreferredSize(new Dimension(180, 360));
+        container.removeAll();
+        userList = users;
         for (String user : users.keySet()) {
             JPanel wrapper = new JPanel();
             wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
             wrapper.setPreferredSize(new Dimension(180, 80));
             wrapper.add(Box.createRigidArea(new Dimension(10, 0)));
-            JLabel userName = new JLabel(user);
-            userName.setAlignmentX(LEFT_ALIGNMENT);
-            wrapper.add(userName, BorderLayout.WEST);
+            JLabel userLabel = new JLabel(user);
+            userLabel.setAlignmentX(LEFT_ALIGNMENT);
+            wrapper.add(userLabel, BorderLayout.WEST);
             wrapper.add(Box.createRigidArea(new Dimension(20, 0)));
-            if (isManager) {
+            if (isManager && !users.get(user).equals("Manager")) {
                 JButton kickButton = new JButton("Kick out");
                 kickButton.setAlignmentX(RIGHT_ALIGNMENT);
+                kickButton.addActionListener(new KickListener(userLabel.getText()));
                 wrapper.add(kickButton, BorderLayout.EAST);
             }
-            wrapper.setBorder(BorderFactory.createLineBorder(Color.black));
             container.add(wrapper);
         }
-        add(container);
-        validate();
-        repaint();
+        this.revalidate();
+        this.repaint();
     }
 
-    public void print() {
-        System.out.println(userList);
-    }
 
+    record KickListener(String username) implements ActionListener {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            userList.remove(username);
+            try {
+                server.updateUserList(userList);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 
 }
