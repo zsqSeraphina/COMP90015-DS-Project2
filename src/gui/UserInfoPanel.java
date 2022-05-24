@@ -41,7 +41,6 @@ public class UserInfoPanel extends JPanel {
         userList = users;
 
         for (String user : users.keySet()) {
-            System.out.println(user);
             JPanel wrapper = new JPanel();
             wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
             wrapper.setPreferredSize(new Dimension(180, 80));

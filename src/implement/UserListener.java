@@ -36,9 +36,9 @@ public class UserListener implements Runnable {
                     JOptionPane.showMessageDialog(null,
                             "You have been kicked out by the manager!",
                             "Closing alert", JOptionPane.ERROR_MESSAGE);
-                    server.resetAll();
                     System.exit(0);
                 }
+
                 // Exit when manager exited
                 if (!userList.containsValue("Manager")) {
                     JOptionPane.showMessageDialog(null,
@@ -54,7 +54,7 @@ public class UserListener implements Runnable {
                     if (!(candidateList = server.getCandidateList()).isEmpty()) {
                         for (String candidate : candidateList) {
                             int joinConfirm = JOptionPane.showConfirmDialog(null,
-                                    "New user " + candidate + " is applying for join the white board!",
+                                    candidate + " wants to share your whiteboard!",
                                     "Join Request", JOptionPane.YES_NO_OPTION);
                             if (joinConfirm == JOptionPane.YES_OPTION) {
                                 removeList.add(candidate);

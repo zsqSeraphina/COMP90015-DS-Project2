@@ -46,6 +46,9 @@ public class WhiteBoardFrame extends JFrame {
 
                         if (closingConfirm == JOptionPane.YES_OPTION) {
                             try {
+                                if (userList.get(username).equals("Manager")) {
+                                    server.resetAll();
+                                }
                                 userList.remove(username);
                                 server.setUserList(userList);
                             } catch (RemoteException error) {
