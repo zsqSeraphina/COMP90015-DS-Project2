@@ -47,7 +47,7 @@ public class WhiteBoardFrame extends JFrame {
                         if (closingConfirm == JOptionPane.YES_OPTION) {
                             try {
                                 userList.remove(username);
-                                server.updateUserList(userList);
+                                server.setUserList(userList);
                             } catch (RemoteException error) {
                                 error.printStackTrace();
                             }
@@ -56,8 +56,6 @@ public class WhiteBoardFrame extends JFrame {
                     }
                 }
         );
-
-
 
         if (userList.get(username).equals("Manager")) {
             this.setTitle("Manager White Board");
@@ -101,7 +99,7 @@ public class WhiteBoardFrame extends JFrame {
         paintOption.add(text);
         menuBar.add(paintOption);
 
-        MenuItem cp = new MenuItem("CP");
+        MenuItem cp = new MenuItem("colour Palate");
         Menu colorOption= new Menu("Color Option");
         cp.addActionListener(e -> {
             Color color = JColorChooser.showDialog(null, "Choose color", Color.BLACK);
@@ -142,11 +140,8 @@ public class WhiteBoardFrame extends JFrame {
     }
 
     public void reloadList(ConcurrentHashMap<String, String> userList) {
-
         if (!userList.equals(this.userList)) {
-//            userList.keySet().removeAll(this.userList.keySet());
             userPanel.reloadList(userList);
-//            this.userList.putAll(userList);
             this.userList = userList;
             this.revalidate();
             this.repaint();

@@ -29,17 +29,19 @@ public class UserInfoPanel extends JPanel {
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setPreferredSize(new Dimension(200, 400));
         JScrollPane scrollContainer = new JScrollPane(container);
-        scrollContainer.setPreferredSize(new Dimension(280, 400));
+        scrollContainer.getViewport().setPreferredSize(new Dimension(280, 400));
         scrollContainer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollContainer);
-        System.out.println(userList);
         reloadList(userList);
     }
 
     public void reloadList(ConcurrentHashMap<String, String> users) {
+
         container.removeAll();
         userList = users;
+
         for (String user : users.keySet()) {
+            System.out.println(user);
             JPanel wrapper = new JPanel();
             wrapper.setLayout(new BoxLayout(wrapper, BoxLayout.X_AXIS));
             wrapper.setPreferredSize(new Dimension(180, 80));
@@ -67,7 +69,7 @@ public class UserInfoPanel extends JPanel {
         public void actionPerformed(ActionEvent e) {
             userList.remove(username);
             try {
-                server.updateUserList(userList);
+                server.setUserList(userList);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
             }

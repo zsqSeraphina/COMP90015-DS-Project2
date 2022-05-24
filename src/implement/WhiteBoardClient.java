@@ -29,7 +29,7 @@ public class WhiteBoardClient {
         String serverIpAddress;
         int port;
         String username;
-        ConcurrentHashMap<Point, Shape> shapes = new ConcurrentHashMap<>();
+
 
         try {
             serverIpAddress = args[0];
@@ -48,9 +48,7 @@ public class WhiteBoardClient {
             System.out.println("Client connected!");
 
             ConcurrentHashMap<String, String> userList = server.addUser(username);
-            WhiteBoardFrame board = new WhiteBoardFrame(shapes, username, userList, server);
-
-            new Thread(new UserListener(board, username, server), "UserListener.java").start();
+            new Thread(new CandidateListener(username, server, userList)).start();
 
         }catch (MalformedURLException | NotBoundException | RemoteException e) {
             // TODO Auto-generated catch block

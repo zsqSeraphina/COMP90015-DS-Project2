@@ -8,6 +8,7 @@ import java.awt.*;
 import java.io.Serial;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,24 +20,22 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     @Serial
     private static final long serialVersionUID = -7231033280190281294L;
     private ConcurrentHashMap<String, String> userList;
-    private final ConcurrentHashMap<Point, Shape> shapes;
-    private boolean isManager;
+    private ConcurrentHashMap<Point, Shape> shapes;
+    private ArrayList<String> candidateList;
 
     public WhiteBoardServant() throws RemoteException {
         super();
         this.userList = new ConcurrentHashMap<>();
         this.shapes = new ConcurrentHashMap<>();
-        shapes.put(new Point(), new Shape());
+        this.candidateList = new ArrayList<>();
     }
 
     @Override
-    public synchronized ConcurrentHashMap<String, String> addUser(String userName)throws RemoteException {
+    public synchronized ConcurrentHashMap<String, String> addUser(String username)throws RemoteException {
         if (userList.isEmpty()) {
-            this.userList.put(userName, "Manager");
-            this.isManager = true;
+            this.userList.put(username, "Manager");
         } else {
-            this.userList.put(userName, "User");
-            this.isManager = false;
+            candidateList.add(username);
         }
         return this.userList;
     }
@@ -57,7 +56,24 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     }
 
     @Override
-    public void updateUserList(ConcurrentHashMap<String, String> userList) throws RemoteException {
+    public void setUserList(ConcurrentHashMap<String, String> userList) throws RemoteException {
         this.userList = userList;
+    }
+
+    @Override
+    public ArrayList<String> getCandidateList() throws RemoteException {
+        return this.candidateList;
+    }
+
+    @Override
+    public void setCandidateList(ArrayList<String> candidateList) throws RemoteException {
+        this.candidateList = candidateList;
+    }
+
+    @Override
+    public void resetAll() throws RemoteException {
+        this.userList = new ConcurrentHashMap<>();
+        this.shapes = new ConcurrentHashMap<>();
+        this.candidateList = new ArrayList<>();
     }
 }
