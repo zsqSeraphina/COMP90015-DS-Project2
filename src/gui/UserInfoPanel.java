@@ -18,7 +18,7 @@ public class UserInfoPanel extends JPanel {
     private static IWhiteBoardServant server;
 
     UserInfoPanel(String username, ConcurrentHashMap<String, String> userList, IWhiteBoardServant server) {
-        this.setPreferredSize(new Dimension(200,180));
+        this.setPreferredSize(new Dimension(200,290));
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         if (userList.get(username).equals("Manager")) {
             this.isManager = true;

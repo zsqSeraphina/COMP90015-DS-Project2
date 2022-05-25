@@ -6,14 +6,11 @@ import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 public class WhiteBoardFrame extends JFrame {
 
@@ -130,6 +127,7 @@ public class WhiteBoardFrame extends JFrame {
 
         JPanel container = new JPanel();
         container.setLayout(new GridLayout(2, 1));
+        container.setPreferredSize(new Dimension(200,400));
 
         userPanel = new UserInfoPanel(username, userList, server);
         reloadList(userList);
@@ -137,7 +135,7 @@ public class WhiteBoardFrame extends JFrame {
         chatPanel = new ChatPanel(username, messages, server);
         container.add(chatPanel);
 
-        gbc.weightx = 0.4;
+        gbc.weightx = 0.1;
         gbc.weighty = 1.0;
         gbc.gridx = 1;
         gbc.gridy = 0;
