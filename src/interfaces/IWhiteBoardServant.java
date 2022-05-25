@@ -1,7 +1,6 @@
 package src.interfaces;
 
 import src.constants.Shape;
-import src.gui.WhiteBoardFrame;
 
 import java.awt.*;
 import java.rmi.Remote;

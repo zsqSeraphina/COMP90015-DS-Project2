@@ -27,13 +27,15 @@ public class WhiteBoardFrame extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         this.userList = userList;
+        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.addWindowListener(
                 new WindowAdapter() {
+
                     @Override
                     public void windowClosing(WindowEvent e) {
                         super.windowClosing(e);
-                        int closingConfirm = 0;
+                        int closingConfirm = JOptionPane.NO_OPTION;
                         if (!userList.get(username).equals("Manager")) {
                             closingConfirm = JOptionPane.showConfirmDialog(null,
                                     "You are closing the white board",

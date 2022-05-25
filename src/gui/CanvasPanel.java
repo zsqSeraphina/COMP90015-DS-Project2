@@ -7,7 +7,12 @@ import src.interfaces.IWhiteBoardServant;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.font.FontRenderContext;
+import java.awt.font.LineBreakMeasurer;
+import java.awt.font.TextLayout;
 import java.rmi.RemoteException;
+import java.text.AttributedCharacterIterator;
+import java.text.AttributedString;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -57,6 +62,8 @@ public class CanvasPanel extends JPanel {
     }
     public void paint(Graphics g) {
         super.paint(g);
+
+        // paint all the shapes currently in the server shape list
         for (Shape shape : shapes.values())  {
             Point start = shape.getStart();
             Point end = shape.getEnd();
@@ -65,20 +72,54 @@ public class CanvasPanel extends JPanel {
             if (start != null && end != null && type != PaintOptionType.TEXT) {
                 drawChosenShape(g, start, end, type, color);
             } else if (start != null && end != null && shape.getText() != null) {
+                // draw the text with new lines
+                Graphics2D g2d = (Graphics2D) g;
                 g.setColor(shape.getColor());
-                g.drawString(shape.getText(), start.x + 6, start.y + 18);
+                AttributedString attributedText = new AttributedString(shape.getText());
+                AttributedCharacterIterator paragraph = attributedText.getIterator();
+                FontRenderContext frc = g2d.getFontRenderContext();
+                LineBreakMeasurer lineMeasurer = new LineBreakMeasurer(paragraph, frc);
+                int paragraphStart = paragraph.getBeginIndex();
+                int paragraphEnd = paragraph.getEndIndex();
+                float breakWidth = (float)(end.x - start.x);
+                float drawPosY = start.y + 6;
+                lineMeasurer.setPosition(paragraphStart);
+                while (lineMeasurer.getPosition() < paragraphEnd) {
+
+                    TextLayout layout = lineMeasurer.nextLayout(breakWidth);
+                    float drawPosX = layout.isLeftToRight()
+                            ? start.x + 6 : breakWidth - layout.getAdvance();
+                    drawPosY += layout.getAscent();
+                    layout.draw(g2d, drawPosX, drawPosY);
+                    drawPosY += layout.getDescent() + layout.getLeading();
+                }
                 repaint();
             }
         }
 
+        // paint the current drawing shape
+        Point currentStart = this.start;
+        Point currentEnd = this.end;
         if (start != null && end != null) {
             Shape newShape = new Shape();
-            newShape.setStart(this.start);
-            newShape.setEnd(this.end);
+            if (start.x < end.x) {
+                newShape.setStart(this.start);
+            } else {
+                newShape.setEnd(this.start);
+                currentEnd = this.start;
+            }
+
+            if (start.y < end.y) {
+                newShape.setEnd(this.end);
+            } else {
+                newShape.setStart(this.end);
+                currentStart = this.end;
+            }
+
             newShape.setType(this.type);
             newShape.setColor(this.paintColor);
             shapes.put(this.start, newShape);
-            drawChosenShape(g, this.start, this.end, this.type, this.paintColor);
+            drawChosenShape(g, currentStart, currentEnd, this.type, this.paintColor);
             try {
                 server.updateShapes(this.start, newShape);
             } catch (RemoteException e) {
@@ -119,6 +160,8 @@ public class CanvasPanel extends JPanel {
             textArea.setPreferredSize(new Dimension(end.x - start.x, end.y - start.y));
             textArea.setBackground(Color.lightGray);
             textArea.setBounds(0, 0, end.x - start.x, end.y - start.y);
+            textArea.setWrapStyleWord(true);
+            textArea.setLineWrap(true);
             JButton confirm = new JButton("confirm");
             confirm.setPreferredSize(new Dimension(100, 40));
             panel.add(textArea);

@@ -35,7 +35,8 @@ public class WhiteBoardClient {
             serverIpAddress = args[0];
             port = Integer.parseInt(args[1]);
 //            userName = args[2];
-            username = JOptionPane.showInputDialog(null, "Please enter your username", "Username", JOptionPane.INFORMATION_MESSAGE);
+            username = JOptionPane.showInputDialog(null, "Please enter your username",
+                    "Username", JOptionPane.INFORMATION_MESSAGE);
         } catch(Exception e) {
             throw new IllegalArgumentException
                     ("Error:" + e
@@ -46,6 +47,11 @@ public class WhiteBoardClient {
         try{
             server = (IWhiteBoardServant) Naming.lookup(registration);
             System.out.println("Client connected!");
+            if (server.getUserList().containsKey(username)) {
+                JOptionPane.showMessageDialog(null, "Username already in use",
+                        "Username used", JOptionPane.ERROR_MESSAGE);
+                System.exit(0);
+            }
 
             ConcurrentHashMap<String, String> userList = server.addUser(username);
             new Thread(new CandidateListener(username, server, userList)).start();

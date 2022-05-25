@@ -1,13 +1,11 @@
 package src.implement;
 
-import src.constants.Shape;
 import src.gui.WhiteBoardFrame;
 import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserListener implements Runnable {
