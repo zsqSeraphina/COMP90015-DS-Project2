@@ -13,7 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * student id 903274
  */
 public interface IWhiteBoardServant extends Remote{
-    ConcurrentHashMap<String, String> addUser(String userName)throws RemoteException;
+    void addUser(String userName)throws RemoteException;
     ConcurrentHashMap<String, String> getUserList() throws RemoteException;
     ConcurrentHashMap<Point, Shape> getShapes() throws RemoteException;
     void updateShapes(Point point, Shape shape) throws RemoteException;

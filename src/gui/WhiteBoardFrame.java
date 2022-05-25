@@ -21,9 +21,9 @@ public class WhiteBoardFrame extends JFrame {
 
     private ConcurrentHashMap<String, String> userList;
     private ArrayList<String> messages;
-    private UserInfoPanel userPanel;
-    private CanvasPanel canvasPanel;
-    private ChatPanel chatPanel;
+    private final UserInfoPanel userPanel;
+    private final CanvasPanel canvasPanel;
+    private final ChatPanel chatPanel;
 
     public WhiteBoardFrame(ConcurrentHashMap<Point, Shape> shapes, String username,
                            ConcurrentHashMap<String, String> userList,
@@ -42,7 +42,7 @@ public class WhiteBoardFrame extends JFrame {
                     @Override
                     public void windowClosing(WindowEvent e) {
                         super.windowClosing(e);
-                        int closingConfirm = JOptionPane.NO_OPTION;
+                        int closingConfirm;
                         if (!userList.get(username).equals("Manager")) {
                             closingConfirm = JOptionPane.showConfirmDialog(null,
                                     "You are closing the white board",
@@ -85,9 +85,7 @@ public class WhiteBoardFrame extends JFrame {
         open = new MenuItem("Open");
         save = new MenuItem("Save");
 
-        save.addActionListener(e -> {
-            FileHandler.saveFile(server);
-        });
+        save.addActionListener(e -> FileHandler.saveFile(server));
 
         newFile.addActionListener(e -> {
             try {
@@ -105,9 +103,7 @@ public class WhiteBoardFrame extends JFrame {
             }
         });
 
-        open.addActionListener(e -> {
-            FileHandler.openFile(server);
-        });
+        open.addActionListener(e -> FileHandler.openFile(server));
 
         fileOption.add(newFile);
         fileOption.add(open);
@@ -124,25 +120,15 @@ public class WhiteBoardFrame extends JFrame {
         triangle = new MenuItem("Triangle");
         text = new MenuItem("Text");
 
-        line.addActionListener(e -> {
-            canvasPanel.setPaintOptionType(PaintOptionType.LINE);
-        });
+        line.addActionListener(e -> canvasPanel.setPaintOptionType(PaintOptionType.LINE));
 
-        rect.addActionListener(e -> {
-            canvasPanel.setPaintOptionType(PaintOptionType.RECTANGLE);
-        });
+        rect.addActionListener(e -> canvasPanel.setPaintOptionType(PaintOptionType.RECTANGLE));
 
-        circle.addActionListener(e -> {
-            canvasPanel.setPaintOptionType(PaintOptionType.CIRCLE);
-        });
+        circle.addActionListener(e -> canvasPanel.setPaintOptionType(PaintOptionType.CIRCLE));
 
-        triangle.addActionListener(e -> {
-            canvasPanel.setPaintOptionType(PaintOptionType.TRIANGLE);
-        });
+        triangle.addActionListener(e -> canvasPanel.setPaintOptionType(PaintOptionType.TRIANGLE));
 
-        text.addActionListener(e -> {
-            canvasPanel.setPaintOptionType(PaintOptionType.TEXT);
-        });
+        text.addActionListener(e -> canvasPanel.setPaintOptionType(PaintOptionType.TEXT));
 
         paintOption.add(line);
         paintOption.add(rect);

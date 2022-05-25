@@ -4,7 +4,6 @@ import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.rmi.Naming;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author Siqi Zhou
@@ -47,7 +46,7 @@ public class WhiteBoardClient {
                 System.exit(0);
             }
 
-            ConcurrentHashMap<String, String> userList = server.addUser(username);
+            server.addUser(username);
             new Thread(new CandidateListener(username, server)).start();
 
         } catch (Exception e) {

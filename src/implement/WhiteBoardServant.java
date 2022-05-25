@@ -32,13 +32,12 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     }
 
     @Override
-    public synchronized ConcurrentHashMap<String, String> addUser(String username)throws RemoteException {
+    public synchronized void addUser(String username)throws RemoteException {
         if (userList.isEmpty()) {
             this.userList.put(username, "Manager");
         } else {
             candidateList.add(username);
         }
-        return this.userList;
     }
 
     @Override

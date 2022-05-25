@@ -14,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * student id 903274
  */
 public class CandidateListener implements Runnable {
-    private IWhiteBoardServant server;
-    private String username;
+    private final IWhiteBoardServant server;
+    private final String username;
     CandidateListener(String username, IWhiteBoardServant server) {
         this.server = server;
         this.username = username;

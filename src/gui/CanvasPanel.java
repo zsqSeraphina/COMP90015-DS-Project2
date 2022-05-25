@@ -2,7 +2,6 @@ package src.gui;
 
 import src.constants.PaintOptionType;
 import src.constants.Shape;
-import src.implement.FileHandler;
 import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
@@ -27,7 +26,7 @@ public class CanvasPanel extends JPanel {
     private PaintOptionType type = PaintOptionType.LINE;
     private ConcurrentHashMap<Point, Shape> shapes;
     private Color paintColor = Color.black;
-    private IWhiteBoardServant server;
+    private final IWhiteBoardServant server;
 
 
     CanvasPanel(ConcurrentHashMap<Point, Shape> shapes, IWhiteBoardServant server) {
