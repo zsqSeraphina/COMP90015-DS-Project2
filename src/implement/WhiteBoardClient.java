@@ -1,15 +1,9 @@
 package src.implement;
 
-import src.constants.Shape;
-import src.gui.WhiteBoardFrame;
 import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
-import java.awt.*;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**

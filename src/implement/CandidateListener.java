@@ -25,6 +25,7 @@ public class CandidateListener implements Runnable {
         try {
             JFrame waiting = new JFrame("Waiting");
             JTextField waitingText = new JTextField("You are waiting for the permission from the manager");
+            waitingText.setFont(new Font("Times New Roman", Font.BOLD, 20));
             waiting.add(waitingText);
             waiting.setSize(new Dimension(200, 500));
             waiting.setFocusableWindowState(true);

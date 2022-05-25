@@ -2,6 +2,7 @@ package src.gui;
 
 import src.constants.PaintOptionType;
 import src.constants.Shape;
+import src.implement.FileHandler;
 import src.interfaces.IWhiteBoardServant;
 
 import javax.swing.*;
@@ -78,7 +79,44 @@ public class WhiteBoardFrame extends JFrame {
         }
 
         MenuBar menuBar = new MenuBar();
-        Menu paintOption= new Menu("Paint Option");
+        Menu fileOption= new Menu("File");
+        MenuItem newFile, open, save;
+        newFile = new MenuItem("New");
+        open = new MenuItem("Open");
+        save = new MenuItem("Save");
+
+        save.addActionListener(e -> {
+            FileHandler.saveFile(server);
+        });
+
+        newFile.addActionListener(e -> {
+            try {
+                int newFileConfirm = JOptionPane.showConfirmDialog(null,
+                        "You will lose your current painting!",
+                        "Confirm New File", JOptionPane.YES_NO_OPTION);
+                if (newFileConfirm == JOptionPane.YES_OPTION) {
+                    server.renew();
+                }
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, e + ", please try again later",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }
+        });
+
+        open.addActionListener(e -> {
+            FileHandler.openFile(server);
+        });
+
+        fileOption.add(newFile);
+        fileOption.add(open);
+        fileOption.add(save);
+        if (userList.get(username).equals("Manager")) {
+            menuBar.add(fileOption);
+        }
+
+        Menu paintOption= new Menu("Shape");
         MenuItem line, rect, circle, triangle, text;
         line = new MenuItem("Line");
         rect = new MenuItem("Rectangle");
@@ -113,8 +151,8 @@ public class WhiteBoardFrame extends JFrame {
         paintOption.add(text);
         menuBar.add(paintOption);
 
-        MenuItem cp = new MenuItem("colour Palate");
-        Menu colorOption= new Menu("Color Option");
+        MenuItem cp = new MenuItem("Colour");
+        Menu colorOption= new Menu("Color Palate");
         cp.addActionListener(e -> {
             Color color = JColorChooser.showDialog(null, "Choose color", Color.BLACK);
             if (color != null) {
