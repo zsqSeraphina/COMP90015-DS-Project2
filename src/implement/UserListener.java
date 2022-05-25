@@ -10,10 +10,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class UserListener implements Runnable {
 
-    private ConcurrentHashMap<String, String> userList = new ConcurrentHashMap<>();
-    private WhiteBoardFrame whiteBoardFrame;
-    private String username;
-    private IWhiteBoardServant server;
+    private final WhiteBoardFrame whiteBoardFrame;
+    private final String username;
+    private final IWhiteBoardServant server;
+
     UserListener(WhiteBoardFrame whiteBoardFrame,
                  String username, IWhiteBoardServant server) {
         this.whiteBoardFrame = whiteBoardFrame;
@@ -25,9 +25,11 @@ public class UserListener implements Runnable {
     public void run() {
         while (true) {
             try {
-                this.userList = server.getUserList();
+                ConcurrentHashMap<String, String> userList = server.getUserList();
                 whiteBoardFrame.reloadList(userList);
                 whiteBoardFrame.reloadShapes(server.getShapes());
+                ArrayList<String> messages = server.getMessageList();
+                whiteBoardFrame.reloadMessage(messages);
 
                 // Exit when this user not in the list
                 if (!userList.containsKey(username)) {

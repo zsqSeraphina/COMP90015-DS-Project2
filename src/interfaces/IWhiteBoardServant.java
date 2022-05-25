@@ -21,4 +21,6 @@ public interface IWhiteBoardServant extends Remote{
     ArrayList<String> getCandidateList() throws RemoteException;
     void setCandidateList(ArrayList<String> candidateList) throws RemoteException;
     void resetAll() throws RemoteException;
+    void addMessageList(String message) throws RemoteException;
+    ArrayList<String> getMessageList() throws RemoteException;
 }

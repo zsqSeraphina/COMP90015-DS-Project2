@@ -54,7 +54,7 @@ public class WhiteBoardClient {
             }
 
             ConcurrentHashMap<String, String> userList = server.addUser(username);
-            new Thread(new CandidateListener(username, server, userList)).start();
+            new Thread(new CandidateListener(username, server)).start();
 
         }catch (MalformedURLException | NotBoundException | RemoteException e) {
             // TODO Auto-generated catch block

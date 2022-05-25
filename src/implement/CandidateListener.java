@@ -7,16 +7,15 @@ import src.interfaces.IWhiteBoardServant;
 import javax.swing.*;
 import java.awt.*;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CandidateListener implements Runnable {
     private IWhiteBoardServant server;
     private String username;
-    private ConcurrentHashMap<String, String> userList;
-    CandidateListener(String username, IWhiteBoardServant server, ConcurrentHashMap<String, String> userList) {
+    CandidateListener(String username, IWhiteBoardServant server) {
         this.server = server;
         this.username = username;
-        this.userList = userList;
     }
     @Override
     public void run() {
@@ -35,7 +34,8 @@ public class CandidateListener implements Runnable {
                     waiting.dispose();
                     waiting.setVisible(false);
                     ConcurrentHashMap<Point, Shape> shapes = new ConcurrentHashMap<>();
-                    WhiteBoardFrame board = new WhiteBoardFrame(shapes, username, server.getUserList(), server);
+                    WhiteBoardFrame board = new WhiteBoardFrame(shapes, username,
+                            server.getUserList(), server.getMessageList(), server);
                     new Thread(new UserListener(board, username, server), "UserListener.java").start();
                     break;
                 }

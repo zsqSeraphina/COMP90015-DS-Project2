@@ -18,7 +18,7 @@ public class UserInfoPanel extends JPanel {
     private static IWhiteBoardServant server;
 
     UserInfoPanel(String username, ConcurrentHashMap<String, String> userList, IWhiteBoardServant server) {
-        this.setPreferredSize(new Dimension(200,400));
+        this.setPreferredSize(new Dimension(200,180));
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         if (userList.get(username).equals("Manager")) {
             this.isManager = true;
@@ -27,9 +27,9 @@ public class UserInfoPanel extends JPanel {
         this.userList = userList;
         this.server = server;
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
-        container.setPreferredSize(new Dimension(200, 400));
+        container.setPreferredSize(new Dimension(200, 180));
         JScrollPane scrollContainer = new JScrollPane(container);
-        scrollContainer.getViewport().setPreferredSize(new Dimension(280, 400));
+        scrollContainer.getViewport().setPreferredSize(new Dimension(280, 180));
         scrollContainer.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         add(scrollContainer);
         reloadList(userList);

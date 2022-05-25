@@ -11,22 +11,27 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 public class WhiteBoardFrame extends JFrame {
 
     private ConcurrentHashMap<String, String> userList;
+    private ArrayList<String> messages;
     private UserInfoPanel userPanel;
     private CanvasPanel canvasPanel;
+    private ChatPanel chatPanel;
 
     public WhiteBoardFrame(ConcurrentHashMap<Point, Shape> shapes, String username,
-                           ConcurrentHashMap<String, String> userList, IWhiteBoardServant server) {
+                           ConcurrentHashMap<String, String> userList,
+                           ArrayList<String> messages, IWhiteBoardServant server) {
         canvasPanel = new CanvasPanel(shapes, server);
         this.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         this.userList = userList;
+        this.messages = messages;
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.addWindowListener(
@@ -123,13 +128,21 @@ public class WhiteBoardFrame extends JFrame {
         gbc.gridy = 0;
         this.getContentPane().add(canvasPanel, gbc);
 
+        JPanel container = new JPanel();
+        container.setLayout(new GridLayout(2, 1));
+
+        userPanel = new UserInfoPanel(username, userList, server);
+        reloadList(userList);
+        container.add(userPanel);
+        chatPanel = new ChatPanel(username, messages, server);
+        container.add(chatPanel);
+
         gbc.weightx = 0.4;
         gbc.weighty = 1.0;
         gbc.gridx = 1;
         gbc.gridy = 0;
-        userPanel = new UserInfoPanel(username, userList, server);
-        reloadList(userList);
-        this.getContentPane().add(userPanel, gbc);
+        this.getContentPane().add(container, gbc);
+
 
         this.setResizable(false);
         this.pack();
@@ -149,6 +162,15 @@ public class WhiteBoardFrame extends JFrame {
 
     public void reloadShapes(ConcurrentHashMap<Point, Shape> shapes) {
         canvasPanel.setShapes(shapes);
+    }
+
+    public void reloadMessage(ArrayList<String> messages) {
+        if (!messages.equals(this.messages)) {
+            chatPanel.reloadMessage(messages);
+            this.messages = messages;
+            this.revalidate();
+            this.repaint();
+        }
     }
 
 }

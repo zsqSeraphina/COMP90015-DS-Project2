@@ -21,12 +21,14 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     private ConcurrentHashMap<String, String> userList;
     private ConcurrentHashMap<Point, Shape> shapes;
     private ArrayList<String> candidateList;
+    private ArrayList<String> messageList;
 
     public WhiteBoardServant() throws RemoteException {
         super();
         this.userList = new ConcurrentHashMap<>();
         this.shapes = new ConcurrentHashMap<>();
         this.candidateList = new ArrayList<>();
+        this.messageList = new ArrayList<>();
     }
 
 
@@ -74,5 +76,17 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
         this.userList = new ConcurrentHashMap<>();
         this.shapes = new ConcurrentHashMap<>();
         this.candidateList = new ArrayList<>();
+        this.messageList = new ArrayList<>();
+    }
+
+    @Override
+    public void addMessageList(String message) throws RemoteException {
+        this.messageList.add(message);
+        System.out.println(this.messageList);
+    }
+
+    @Override
+    public ArrayList<String> getMessageList() throws RemoteException {
+        return this.messageList;
     }
 }
