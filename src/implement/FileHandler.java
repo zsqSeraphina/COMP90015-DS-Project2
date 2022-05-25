@@ -9,6 +9,10 @@ import java.awt.*;
 import java.io.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class FileHandler {
 
     public static void saveFile(IWhiteBoardServant server) {
