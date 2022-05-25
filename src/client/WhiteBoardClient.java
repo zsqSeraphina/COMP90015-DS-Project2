@@ -27,9 +27,11 @@ public class WhiteBoardClient {
         try {
             serverIpAddress = args[0];
             port = Integer.parseInt(args[1]);
-//            userName = args[2];
-            username = JOptionPane.showInputDialog(null, "Please enter your username",
-                    "Username", JOptionPane.INFORMATION_MESSAGE);
+            username = args[2];
+
+            // can type username through UI
+//            username = JOptionPane.showInputDialog(null, "Please enter your username",
+//                    "Username", JOptionPane.INFORMATION_MESSAGE);
         } catch(Exception e) {
             throw new IllegalArgumentException
                     ("Error:" + e
