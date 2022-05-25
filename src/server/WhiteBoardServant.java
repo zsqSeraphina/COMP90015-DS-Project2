@@ -1,7 +1,6 @@
-package src.implement;
+package src.server;
 
-import src.constants.Shape;
-import src.interfaces.IWhiteBoardServant;
+import src.utils.Shape;
 
 import java.awt.*;
 import java.io.Serial;

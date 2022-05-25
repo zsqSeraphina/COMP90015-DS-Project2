@@ -1,4 +1,4 @@
-package src.constants;
+package src.utils;
 
 import java.io.Serializable;
 

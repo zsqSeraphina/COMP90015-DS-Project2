@@ -1,8 +1,8 @@
-package src.implement;
+package src.client;
 
-import src.constants.Shape;
 import src.gui.WhiteBoardFrame;
-import src.interfaces.IWhiteBoardServant;
+import src.server.IWhiteBoardServant;
+import src.utils.Shape;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class CandidateListener implements Runnable {
     private final IWhiteBoardServant server;
     private final String username;
-    CandidateListener(String username, IWhiteBoardServant server) {
+    public CandidateListener(String username, IWhiteBoardServant server) {
         this.server = server;
         this.username = username;
     }

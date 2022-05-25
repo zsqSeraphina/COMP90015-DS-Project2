@@ -1,4 +1,6 @@
-package src.implement;
+package src.server;
+
+import src.server.WhiteBoardServant;
 
 import java.net.MalformedURLException;
 import java.rmi.Naming;

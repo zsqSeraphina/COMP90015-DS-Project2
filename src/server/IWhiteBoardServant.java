@@ -1,6 +1,6 @@
-package src.interfaces;
+package src.server;
 
-import src.constants.Shape;
+import src.utils.Shape;
 
 import java.awt.*;
 import java.rmi.Remote;

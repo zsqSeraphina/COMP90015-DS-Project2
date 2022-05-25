@@ -1,6 +1,6 @@
-package src.implement;
+package src.client;
 
-import src.interfaces.IWhiteBoardServant;
+import src.server.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.rmi.Naming;

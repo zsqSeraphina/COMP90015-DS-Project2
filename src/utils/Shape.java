@@ -1,4 +1,4 @@
-package src.constants;
+package src.utils;
 
 import java.awt.*;
 import java.io.Serial;

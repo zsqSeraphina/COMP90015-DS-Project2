@@ -1,7 +1,6 @@
-package src.implement;
+package src.utils;
 
-import src.constants.Shape;
-import src.interfaces.IWhiteBoardServant;
+import src.server.IWhiteBoardServant;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;

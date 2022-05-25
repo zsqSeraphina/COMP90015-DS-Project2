@@ -1,9 +1,9 @@
 package src.gui;
 
-import src.constants.PaintOptionType;
-import src.constants.Shape;
-import src.implement.FileHandler;
-import src.interfaces.IWhiteBoardServant;
+import src.utils.PaintOptionType;
+import src.utils.Shape;
+import src.utils.FileHandler;
+import src.server.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package src.gui;
 
-import src.interfaces.IWhiteBoardServant;
+import src.server.IWhiteBoardServant;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
