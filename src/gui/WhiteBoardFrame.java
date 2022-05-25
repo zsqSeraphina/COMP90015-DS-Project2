@@ -137,12 +137,6 @@ public class WhiteBoardFrame extends JFrame {
 
     }
 
-    public ConcurrentHashMap<String, String> getUserList() {
-        return userList;
-    }
-    public void setUserList(ConcurrentHashMap<String, String> userList) {
-        this.userList = userList;
-    }
 
     public void reloadList(ConcurrentHashMap<String, String> userList) {
         if (!userList.equals(this.userList)) {

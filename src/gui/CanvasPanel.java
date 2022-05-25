@@ -98,28 +98,14 @@ public class CanvasPanel extends JPanel {
         }
 
         // paint the current drawing shape
-        Point currentStart = this.start;
-        Point currentEnd = this.end;
         if (start != null && end != null) {
             Shape newShape = new Shape();
-            if (start.x < end.x) {
-                newShape.setStart(this.start);
-            } else {
-                newShape.setEnd(this.start);
-                currentEnd = this.start;
-            }
-
-            if (start.y < end.y) {
-                newShape.setEnd(this.end);
-            } else {
-                newShape.setStart(this.end);
-                currentStart = this.end;
-            }
-
+            newShape.setStart(this.start);
+            newShape.setEnd(this.end);
             newShape.setType(this.type);
             newShape.setColor(this.paintColor);
             shapes.put(this.start, newShape);
-            drawChosenShape(g, currentStart, currentEnd, this.type, this.paintColor);
+            drawChosenShape(g, this.start, this.end, this.type, this.paintColor);
             try {
                 server.updateShapes(this.start, newShape);
             } catch (RemoteException e) {
@@ -137,17 +123,21 @@ public class CanvasPanel extends JPanel {
                 repaint();
             }
             case RECTANGLE, TEXT ->  {
-                g.drawRect(start.x, start.y, Math.abs(end.x - start.x), Math.abs(end.y - start.y));
+                int x = Math.min(start.x, end.x);
+                int y = Math.min(start.y, end.y);
+                g.drawRect(x, y, Math.abs(end.x - start.x), Math.abs(end.y - start.y));
                 repaint();
             }
             case CIRCLE  ->  {
-                g.drawOval(start.x, start.y, Math.abs(end.x - start.x), Math.abs(end.y - start.y));
+                int x = Math.min(start.x, end.x);
+                int y = Math.min(start.y, end.y);
+                g.drawOval(x, y, Math.abs(end.x - start.x), Math.abs(end.y - start.y));
                 repaint();
             }
             case TRIANGLE  ->  {
                 g.drawLine(start.x, start.y, end.x, end.y);
-                g.drawLine(start.x, start.y, (end.x - start.x), end.y);
-                g.drawLine(end.x, end.y, (end.x - start.x), end.y);
+                g.drawLine(start.x, start.y, (end.x - 180), end.y);
+                g.drawLine(end.x, end.y, (end.x - 180), end.y);
                 repaint();
             }
         }
