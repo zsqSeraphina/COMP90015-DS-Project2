@@ -12,6 +12,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class WhiteBoardFrame extends JFrame {
 
     private ConcurrentHashMap<String, String> userList;
@@ -57,6 +61,9 @@ public class WhiteBoardFrame extends JFrame {
                                 server.setUserList(userList);
                             } catch (RemoteException error) {
                                 error.printStackTrace();
+                                JOptionPane.showMessageDialog(null, e + ", please try again later",
+                                        "Error", JOptionPane.ERROR_MESSAGE);
+                                System.exit(1);
                             }
                             System.exit(0);
                         }

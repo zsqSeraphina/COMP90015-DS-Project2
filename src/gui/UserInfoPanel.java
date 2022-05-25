@@ -9,6 +9,10 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class UserInfoPanel extends JPanel {
 
     private static ConcurrentHashMap<String, String> userList;
@@ -71,6 +75,9 @@ public class UserInfoPanel extends JPanel {
                 server.setUserList(userList);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, ex + ", please try again later",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
         }
     }

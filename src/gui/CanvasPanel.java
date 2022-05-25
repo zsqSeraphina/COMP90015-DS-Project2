@@ -110,6 +110,9 @@ public class CanvasPanel extends JPanel {
                 server.updateShapes(this.start, newShape);
             } catch (RemoteException e) {
                 e.printStackTrace();
+                JOptionPane.showMessageDialog(null, e + ", please try again later",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
         }
     }
@@ -176,6 +179,9 @@ public class CanvasPanel extends JPanel {
                     server.updateShapes(start, newShape);
                 } catch (RemoteException error) {
                     error.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e + ", please try again later",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    System.exit(1);
                 }
             });
         }

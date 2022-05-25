@@ -1,10 +1,13 @@
 package src.constants;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class Shape implements Serializable {
 
 

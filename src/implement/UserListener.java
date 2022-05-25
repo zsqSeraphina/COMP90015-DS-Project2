@@ -8,6 +8,10 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class UserListener implements Runnable {
 
     private final WhiteBoardFrame whiteBoardFrame;
@@ -68,6 +72,9 @@ public class UserListener implements Runnable {
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
+                JOptionPane.showMessageDialog(null, e + ", please try again later",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
         }
     }

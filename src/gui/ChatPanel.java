@@ -10,6 +10,11 @@ import java.awt.event.ActionListener;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
+
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class ChatPanel extends JPanel {
     private ArrayList<String> messages;
     public JPanel container = new JPanel();
@@ -81,6 +86,9 @@ public class ChatPanel extends JPanel {
                 }
             } catch (RemoteException ex) {
                 ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, e + ", please try again later",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
         }
     }

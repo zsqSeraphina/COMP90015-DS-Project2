@@ -56,12 +56,11 @@ public class WhiteBoardClient {
             ConcurrentHashMap<String, String> userList = server.addUser(username);
             new Thread(new CandidateListener(username, server)).start();
 
-        }catch (MalformedURLException | NotBoundException | RemoteException e) {
-            // TODO Auto-generated catch block
+        } catch (Exception e) {
             e.printStackTrace();
-            System.exit(0);
-        } catch(Exception e){
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e + ", please try again later",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
         }
 
     }

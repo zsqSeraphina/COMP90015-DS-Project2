@@ -7,9 +7,12 @@ import src.interfaces.IWhiteBoardServant;
 import javax.swing.*;
 import java.awt.*;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * @author Siqi Zhou
+ * student id 903274
+ */
 public class CandidateListener implements Runnable {
     private IWhiteBoardServant server;
     private String username;
