@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="assmt2:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/server</output-path>
+    <output-path>$PROJECT_DIR$/out/artifacts/assmt2_jar</output-path>
     <root id="archive" name="assmt2.jar">
       <element id="module-output" name="assmt2" />
     </root>

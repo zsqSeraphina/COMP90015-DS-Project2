@@ -25,4 +25,6 @@ public interface IWhiteBoardServant extends Remote{
     void addMessageList(String message) throws RemoteException;
     ArrayList<String> getMessageList() throws RemoteException;
     void renew() throws RemoteException;
+    boolean getCanvasClosed() throws RemoteException;
+    void setCanvasClosed(boolean canvasClosed) throws RemoteException;
 }

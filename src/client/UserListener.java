@@ -27,6 +27,7 @@ public class UserListener implements Runnable {
 
     @Override
     public void run() {
+        boolean canvasClosed = false;
         while (true) {
             try {
                 ConcurrentHashMap<String, String> userList = server.getUserList();
@@ -34,6 +35,13 @@ public class UserListener implements Runnable {
                 whiteBoardFrame.reloadShapes(server.getShapes());
                 ArrayList<String> messages = server.getMessageList();
                 whiteBoardFrame.reloadMessage(messages);
+                if  (server.getCanvasClosed() && !canvasClosed) {
+                    whiteBoardFrame.closeCanvas();
+                    canvasClosed = true;
+                } else if  (!server.getCanvasClosed() && canvasClosed) {
+                    whiteBoardFrame.newCanvas();
+                    canvasClosed = false;
+                }
 
                 // Exit when this user not in the list
                 if (!userList.containsKey(username)) {

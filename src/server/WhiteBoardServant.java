@@ -21,6 +21,7 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     private ConcurrentHashMap<Point, Shape> shapes;
     private ArrayList<String> candidateList;
     private ArrayList<String> messageList;
+    private boolean canvasClosed = false;
 
     public WhiteBoardServant() throws RemoteException {
         super();
@@ -96,5 +97,15 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
         this.shapes = new ConcurrentHashMap<>();
         this.candidateList = new ArrayList<>();
         this.messageList = new ArrayList<>();
+    }
+
+    @Override
+    public boolean getCanvasClosed() throws RemoteException {
+        return canvasClosed;
+    }
+
+    @Override
+    public void setCanvasClosed(boolean canvasClosed) throws RemoteException {
+        this.canvasClosed = canvasClosed;
     }
 }

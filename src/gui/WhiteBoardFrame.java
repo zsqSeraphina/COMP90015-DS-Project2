@@ -27,6 +27,8 @@ public class WhiteBoardFrame extends JFrame {
     private CanvasPanel canvasPanel;
     private final ChatPanel chatPanel;
     private JPanel emptyPanel;
+    private ConcurrentHashMap<Point, Shape> shapes;
+    private IWhiteBoardServant server;
 
     public WhiteBoardFrame(ConcurrentHashMap<Point, Shape> shapes, String username,
                            ConcurrentHashMap<String, String> userList,
@@ -37,6 +39,8 @@ public class WhiteBoardFrame extends JFrame {
         gbc.fill = GridBagConstraints.BOTH;
         this.userList = userList;
         this.messages = messages;
+        this.shapes = shapes;
+        this.server = server;
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
         this.addWindowListener(
@@ -112,17 +116,14 @@ public class WhiteBoardFrame extends JFrame {
                     }
                 }
                 if (this.emptyPanel != null) {
-                    this.remove(emptyPanel);
-                    this.emptyPanel = null;
-                    gbc.weightx = 1.0;
-                    gbc.weighty = 1.0;
-                    gbc.gridx = 0;
-                    gbc.gridy = 0;
-                    server.renew();
-                    canvasPanel = new CanvasPanel(shapes, server);
-                    this.getContentPane().add(canvasPanel, gbc);
-                    this.revalidate();
-                    this.repaint();
+                    try {
+                        server.setCanvasClosed(false);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e + ", please try again later",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        System.exit(1);
+                    }
                 }
             } catch (RemoteException ex) {
                 ex.printStackTrace();
@@ -139,18 +140,15 @@ public class WhiteBoardFrame extends JFrame {
                     "You will lose your current painting!",
                     "Confirm New File", JOptionPane.YES_NO_OPTION);
             if (closeFileConfirm == JOptionPane.YES_OPTION) {
-                this.remove(canvasPanel);
-                this.canvasPanel = null;
-                gbc.weightx = 1.0;
-                gbc.weighty = 1.0;
-                gbc.gridx = 0;
-                gbc.gridy = 0;
-                emptyPanel = new JPanel();
-                emptyPanel.setPreferredSize(new Dimension(800, 400));
-                emptyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-                this.getContentPane().add(new JPanel(), gbc);
-                this.revalidate();
-                this.repaint();
+                try {
+                    server.setCanvasClosed(true);
+                    server.renew();
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e + ", please try again later",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    System.exit(1);
+                }
             }
         });
 
@@ -253,5 +251,38 @@ public class WhiteBoardFrame extends JFrame {
             this.repaint();
         }
     }
+
+    public void closeCanvas () {
+        remove(canvasPanel);
+        canvasPanel = null;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        emptyPanel = new JPanel();
+        emptyPanel.setPreferredSize(new Dimension(800, 400));
+        emptyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+        this.getContentPane().add(new JPanel(), gbc);
+        this.revalidate();
+        this.repaint();
+    }
+
+    public void newCanvas () {
+        remove(emptyPanel);
+        emptyPanel = null;
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        canvasPanel = new CanvasPanel(shapes, server);
+        this.getContentPane().add(canvasPanel, gbc);
+        this.revalidate();
+        this.repaint();
+    }
+
 
 }
