@@ -84,7 +84,6 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     @Override
     public void addMessageList(String message) throws RemoteException {
         this.messageList.add(message);
-        System.out.println(this.messageList);
     }
 
     @Override

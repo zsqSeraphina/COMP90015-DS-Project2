@@ -62,29 +62,4 @@ public class Shape implements Serializable {
         this.color = color;
     }
 
-    public boolean isEmpty() {
-        return start == null || end == null || type == null || color == null;
-    }
-
-
-    public void print() {
-        if(start != null){
-            System.out.print(start + " ");
-        }
-        if(end != null){
-            System.out.print(end + " ");
-        }
-        if(type != null){
-            System.out.print(type + " ");
-        }
-        if(text != null){
-            System.out.print(text + " ");
-        }
-        if(color != null){
-            System.out.print(color);
-        } else {
-            System.out.print("no color");
-        }
-        System.out.println("!");
-    }
 }

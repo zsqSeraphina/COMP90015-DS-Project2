@@ -7,6 +7,8 @@ import src.server.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.rmi.RemoteException;
@@ -22,8 +24,9 @@ public class WhiteBoardFrame extends JFrame {
     private ConcurrentHashMap<String, String> userList;
     private ArrayList<String> messages;
     private final UserInfoPanel userPanel;
-    private final CanvasPanel canvasPanel;
+    private CanvasPanel canvasPanel;
     private final ChatPanel chatPanel;
+    private JPanel emptyPanel;
 
     public WhiteBoardFrame(ConcurrentHashMap<Point, Shape> shapes, String username,
                            ConcurrentHashMap<String, String> userList,
@@ -80,20 +83,46 @@ public class WhiteBoardFrame extends JFrame {
 
         MenuBar menuBar = new MenuBar();
         Menu fileOption= new Menu("File");
-        MenuItem newFile, open, save;
+        MenuItem newFile, open, save, close;
         newFile = new MenuItem("New");
         open = new MenuItem("Open");
         save = new MenuItem("Save");
+        close = new MenuItem("Close");
 
-        save.addActionListener(e -> FileHandler.saveFile(server));
+        save.addActionListener(e -> {
+            if (this.canvasPanel != null) {
+                FileHandler.saveFile(server);
+            } else {
+                JOptionPane.showMessageDialog(null, "Please create a white board",
+                        "No white board found", JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
 
         newFile.addActionListener(e -> {
             try {
-                int newFileConfirm = JOptionPane.showConfirmDialog(null,
-                        "You will lose your current painting!",
-                        "Confirm New File", JOptionPane.YES_NO_OPTION);
-                if (newFileConfirm == JOptionPane.YES_OPTION) {
+                int newFileConfirm = 1;
+                if (this.canvasPanel != null) {
+                    newFileConfirm = JOptionPane.showConfirmDialog(null,
+                            "You will lose your current painting!",
+                            "Confirm New File", JOptionPane.YES_NO_OPTION);
+                    if (newFileConfirm == JOptionPane.YES_OPTION) {
+                        server.renew();
+                        this.repaint();
+                    }
+                }
+                if (this.emptyPanel != null) {
+                    this.remove(emptyPanel);
+                    this.emptyPanel = null;
+                    gbc.weightx = 1.0;
+                    gbc.weighty = 1.0;
+                    gbc.gridx = 0;
+                    gbc.gridy = 0;
                     server.renew();
+                    canvasPanel = new CanvasPanel(shapes, server);
+                    this.getContentPane().add(canvasPanel, gbc);
+                    this.revalidate();
+                    this.repaint();
                 }
             } catch (RemoteException ex) {
                 ex.printStackTrace();
@@ -105,9 +134,30 @@ public class WhiteBoardFrame extends JFrame {
 
         open.addActionListener(e -> FileHandler.openFile(server));
 
+        close.addActionListener(e -> {
+            int closeFileConfirm = JOptionPane.showConfirmDialog(null,
+                    "You will lose your current painting!",
+                    "Confirm New File", JOptionPane.YES_NO_OPTION);
+            if (closeFileConfirm == JOptionPane.YES_OPTION) {
+                this.remove(canvasPanel);
+                this.canvasPanel = null;
+                gbc.weightx = 1.0;
+                gbc.weighty = 1.0;
+                gbc.gridx = 0;
+                gbc.gridy = 0;
+                emptyPanel = new JPanel();
+                emptyPanel.setPreferredSize(new Dimension(800, 400));
+                emptyPanel.setBorder(BorderFactory.createLineBorder(Color.black));
+                this.getContentPane().add(new JPanel(), gbc);
+                this.revalidate();
+                this.repaint();
+            }
+        });
+
         fileOption.add(newFile);
         fileOption.add(open);
         fileOption.add(save);
+        fileOption.add(close);
         if (userList.get(username).equals("Manager")) {
             menuBar.add(fileOption);
         }
@@ -190,7 +240,9 @@ public class WhiteBoardFrame extends JFrame {
     }
 
     public void reloadShapes(ConcurrentHashMap<Point, Shape> shapes) {
-        canvasPanel.setShapes(shapes);
+        if (canvasPanel != null) {
+            canvasPanel.setShapes(shapes);
+        }
     }
 
     public void reloadMessage(ArrayList<String> messages) {

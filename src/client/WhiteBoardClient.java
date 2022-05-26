@@ -3,6 +3,7 @@ package src.client;
 import src.server.IWhiteBoardServant;
 
 import javax.swing.*;
+import java.rmi.ConnectException;
 import java.rmi.Naming;
 
 /**
@@ -40,7 +41,14 @@ public class WhiteBoardClient {
 
         String registration = "rmi://" + serverIpAddress + ":" + port + "/WhiteBoardServer";
         try{
-            server = (IWhiteBoardServant) Naming.lookup(registration);
+            try {
+                server = (IWhiteBoardServant) Naming.lookup(registration);
+            } catch (ConnectException e) {
+                JOptionPane.showMessageDialog(null, "No server found, please try again later",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }
+
             System.out.println("Client connected!");
             if (server.getUserList().containsKey(username)) {
                 JOptionPane.showMessageDialog(null, "Username already in use",
