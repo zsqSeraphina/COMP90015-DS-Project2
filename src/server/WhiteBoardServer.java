@@ -1,7 +1,7 @@
 package src.server;
 
-import src.server.WhiteBoardServant;
 
+import javax.swing.*;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
@@ -21,7 +21,6 @@ public class WhiteBoardServer {
             throw new IllegalArgumentException
                     ("Please enter IP address, port");
         }
-
         try {
             serverIpAddress = args[0];
             port = Integer.parseInt(args[1]);
@@ -35,8 +34,14 @@ public class WhiteBoardServer {
             LocateRegistry.createRegistry(port);
             Naming.rebind("rmi://" + serverIpAddress + ":" + port + "/WhiteBoardServer", servant);
             System.out.println("White Board Server Started!");
-        } catch (RemoteException | MalformedURLException e) {
-            // TODO: popup message
+        } catch (MalformedURLException e) {
+            JOptionPane.showMessageDialog(null, "name should in URL format",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+            System.exit(0);
+        } catch (RemoteException e) {
+            JOptionPane.showMessageDialog(null, "remote registry failed",
+                    "Error", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
             System.exit(0);
         }

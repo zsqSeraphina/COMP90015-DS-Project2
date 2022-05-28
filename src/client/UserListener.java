@@ -18,7 +18,7 @@ public class UserListener implements Runnable {
     private final String username;
     private final IWhiteBoardServant server;
 
-    UserListener(WhiteBoardFrame whiteBoardFrame,
+    public UserListener(WhiteBoardFrame whiteBoardFrame,
                  String username, IWhiteBoardServant server) {
         this.whiteBoardFrame = whiteBoardFrame;
         this.username = username;
@@ -31,6 +31,7 @@ public class UserListener implements Runnable {
         while (true) {
             try {
                 ConcurrentHashMap<String, String> userList = server.getUserList();
+                ArrayList<String> rejectList = server.getRejectList();
                 whiteBoardFrame.reloadList(userList);
                 whiteBoardFrame.reloadShapes(server.getShapes());
                 ArrayList<String> messages = server.getMessageList();
@@ -72,6 +73,10 @@ public class UserListener implements Runnable {
                                 removeList.add(candidate);
                                 userList.put(candidate, "User");
                                 server.setUserList(userList);
+                            } else {
+                                removeList.add(candidate);
+                                rejectList.add(candidate);
+                                server.setRejectList(rejectList);
                             }
                         }
                         candidateList.removeAll(removeList);

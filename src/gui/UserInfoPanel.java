@@ -18,18 +18,16 @@ public class UserInfoPanel extends JPanel {
     private static ConcurrentHashMap<String, String> userList;
     private boolean isManager = false;
     public JPanel container = new JPanel();
-    private String username;
     private static IWhiteBoardServant server;
 
-    UserInfoPanel(String username, ConcurrentHashMap<String, String> userList, IWhiteBoardServant server) {
+    public UserInfoPanel(String username, ConcurrentHashMap<String, String> userList, IWhiteBoardServant server) {
         this.setPreferredSize(new Dimension(200,290));
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         if (userList.get(username).equals("Manager")) {
             this.isManager = true;
         }
-        this.username = username;
-        this.userList = userList;
-        this.server = server;
+        UserInfoPanel.userList = userList;
+        UserInfoPanel.server = server;
         container.setLayout(new BoxLayout(container, BoxLayout.Y_AXIS));
         container.setPreferredSize(new Dimension(200, 180));
         JScrollPane scrollContainer = new JScrollPane(container);

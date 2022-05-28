@@ -19,10 +19,9 @@ public class ChatPanel extends JPanel {
     private ArrayList<String> messages;
     public JPanel container = new JPanel();
     public static JTextArea inputArea = new JTextArea();
-    JPanel messageContainer =  new JPanel();
     private static IWhiteBoardServant server;
 
-    ChatPanel(String username, ArrayList<String> messages, IWhiteBoardServant server) {
+    public ChatPanel(String username, ArrayList<String> messages, IWhiteBoardServant server) {
         this.setPreferredSize(new Dimension(180,200));
         this.setBorder(BorderFactory.createLineBorder(Color.black));
         this.messages = messages;
@@ -40,6 +39,7 @@ public class ChatPanel extends JPanel {
         wrapper.setPreferredSize(new Dimension(240, 100));
 
 
+        JPanel messageContainer = new JPanel();
         messageContainer.setPreferredSize(new Dimension(180, 40));
         inputArea.setPreferredSize(new Dimension(180, 40));
         inputArea.setBackground(Color.lightGray);
@@ -53,7 +53,7 @@ public class ChatPanel extends JPanel {
 
         messageContainer.add(inputArea, BorderLayout.WEST);
         messageContainer.add(sendButton, BorderLayout.EAST);
-        sendButton.addActionListener(new sendListener(username));
+        sendButton.addActionListener(new SendListener(username));
 
         add(wrapper);
         add(messageContainer);
@@ -74,7 +74,7 @@ public class ChatPanel extends JPanel {
         this.repaint();
     }
 
-    record sendListener(String username) implements ActionListener {
+    record SendListener(String username) implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
 

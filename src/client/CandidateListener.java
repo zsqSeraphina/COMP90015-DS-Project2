@@ -42,6 +42,14 @@ public class CandidateListener implements Runnable {
                             server.getUserList(), server.getMessageList(), server);
                     new Thread(new UserListener(board, username, server), "UserListener.java").start();
                     break;
+                } else if (server.getRejectList().contains(username)) {
+                    waiting.dispose();
+                    waiting.setVisible(false);
+                    JOptionPane.showMessageDialog(null,
+                            "The manager rejected your request!",
+                            "Rejected", JOptionPane.ERROR_MESSAGE);
+                    System.exit(0);
+                    break;
                 }
 
             }
