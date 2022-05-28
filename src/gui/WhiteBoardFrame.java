@@ -80,15 +80,33 @@ public class WhiteBoardFrame extends JFrame {
 
         MenuBar menuBar = new MenuBar();
         Menu fileOption= new Menu("File");
-        MenuItem newFile, open, save, close;
+        MenuItem newFile, open, save, saveAs, close;
         newFile = new MenuItem("New");
         open = new MenuItem("Open");
         save = new MenuItem("Save");
+        saveAs = new MenuItem("Save as");
         close = new MenuItem("Close");
 
         save.addActionListener(e -> {
             if (this.canvasPanel != null) {
-                FileHandler.saveFile(server);
+                try {
+                    FileHandler.saveFile(server);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, e + ", please try again later",
+                            "Error", JOptionPane.ERROR_MESSAGE);
+                    System.exit(1);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Please create a white board",
+                        "No white board found", JOptionPane.ERROR_MESSAGE);
+            }
+
+        });
+
+        saveAs.addActionListener(e -> {
+            if (this.canvasPanel != null) {
+                FileHandler.saveAsFile(server);
             } else {
                 JOptionPane.showMessageDialog(null, "Please create a white board",
                         "No white board found", JOptionPane.ERROR_MESSAGE);
@@ -104,6 +122,7 @@ public class WhiteBoardFrame extends JFrame {
                             "You will lose your current painting!",
                             "Confirm New File", JOptionPane.YES_NO_OPTION);
                     if (newFileConfirm == JOptionPane.YES_OPTION) {
+                        server.setFileName(null);
                         server.renew();
                         this.repaint();
                     }
@@ -126,7 +145,14 @@ public class WhiteBoardFrame extends JFrame {
             }
         });
 
-        open.addActionListener(e -> FileHandler.openFile(server));
+        open.addActionListener(e -> {
+            try {
+                server.setCanvasClosed(false);
+            } catch (RemoteException ex) {
+                ex.printStackTrace();
+            }
+            FileHandler.openFile(server);
+        });
 
         close.addActionListener(e -> {
             int closeFileConfirm = JOptionPane.showConfirmDialog(null,
@@ -148,6 +174,7 @@ public class WhiteBoardFrame extends JFrame {
         fileOption.add(newFile);
         fileOption.add(open);
         fileOption.add(save);
+        fileOption.add(saveAs);
         fileOption.add(close);
         if (userList.get(username).equals("Manager")) {
             menuBar.add(fileOption);

@@ -23,6 +23,7 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     private ArrayList<String> rejectList;
     private ArrayList<String> messageList;
     private boolean canvasClosed = false;
+    private String fileName = null;
 
     public WhiteBoardServant() throws RemoteException {
         super();
@@ -82,6 +83,9 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
         this.shapes = new ConcurrentHashMap<>();
         this.candidateList = new ArrayList<>();
         this.messageList = new ArrayList<>();
+        this.rejectList = new ArrayList<>();
+        this.canvasClosed = false;
+        this.fileName = null;
     }
 
     @Override
@@ -99,6 +103,8 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
         this.shapes = new ConcurrentHashMap<>();
         this.candidateList = new ArrayList<>();
         this.messageList = new ArrayList<>();
+        this.rejectList = new ArrayList<>();
+        this.fileName = null;
     }
 
     @Override
@@ -119,5 +125,15 @@ public class WhiteBoardServant extends UnicastRemoteObject implements IWhiteBoar
     @Override
     public void setRejectList(ArrayList<String> rejectList) throws RemoteException {
         this.rejectList = rejectList;
+    }
+
+    @Override
+    public String getFileName() throws RemoteException {
+        return fileName;
+    }
+
+    @Override
+    public void setFileName(String fileName) throws RemoteException {
+        this.fileName = fileName;
     }
 }

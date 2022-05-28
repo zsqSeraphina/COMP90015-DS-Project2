@@ -29,4 +29,6 @@ public interface IWhiteBoardServant extends Remote{
     void setCanvasClosed(boolean canvasClosed) throws RemoteException;
     ArrayList<String> getRejectList() throws RemoteException;
     void setRejectList(ArrayList<String> rejectList) throws RemoteException;
+    String getFileName() throws RemoteException;
+    void setFileName(String fileName) throws RemoteException;
 }
