@@ -33,6 +33,7 @@ public class WhiteBoardFrame extends JFrame {
                            ArrayList<String> messages, IWhiteBoardServant server) {
         canvasPanel = new CanvasPanel(shapes, server);
         this.setLayout(new GridBagLayout());
+        this.setTitle(username + " White Board");
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         this.userList = userList;
@@ -76,12 +77,6 @@ public class WhiteBoardFrame extends JFrame {
                     }
                 }
         );
-
-        if (userList.get(username).equals("Manager")) {
-            this.setTitle("Manager White Board");
-        } else {
-            this.setTitle("User White Board");
-        }
 
         MenuBar menuBar = new MenuBar();
         Menu fileOption= new Menu("File");

@@ -138,9 +138,21 @@ public class CanvasPanel extends JPanel {
                 repaint();
             }
             case TRIANGLE  ->  {
-                g.drawLine(start.x, start.y, end.x, end.y);
-                g.drawLine(start.x, start.y, (end.x - 180), end.y);
-                g.drawLine(end.x, end.y, (end.x - 180), end.y);
+                if (start.x < end.x && start.y > end.y) {
+                    g.drawLine(start.x, start.y, end.x, end.y);
+                    g.drawLine(start.x, start.y, (end.x - 180), end.y);
+                    g.drawLine(end.x, end.y, (end.x - 180), end.y);
+                } else if (start.x > end.x && start.y < end.y) {
+                    g.drawLine(start.x, start.y, end.x, end.y);
+                    g.drawLine(start.x, start.y, (end.x + 180), end.y);
+                    g.drawLine(end.x, end.y, (end.x + 180), end.y);
+                } else {
+                    int midX = Math.abs(start.x - end.x)/2 + start.x;
+                    int midY = Math.abs(start.y - end.y)/2 + end.y;
+                    int[] xLine = {start.x, end.x, midX};
+                    int[] yLine = {start.y, end.y, midY};
+                    g.drawPolygon(xLine, yLine, 3);
+                }
                 repaint();
             }
         }
@@ -165,24 +177,26 @@ public class CanvasPanel extends JPanel {
             this.validate();
             this.repaint();
             confirm.addActionListener(e -> {
-                Shape newShape = new Shape();
-                newShape.setStart(start);
-                newShape.setEnd(end);
-                newShape.setType(this.type);
-                newShape.setText(textArea.getText());
-                newShape.setColor(this.paintColor);
-                shapes.put(start, newShape);
+                if (!textArea.getText().isBlank()) {
+                    Shape newShape = new Shape();
+                    newShape.setStart(start);
+                    newShape.setEnd(end);
+                    newShape.setType(this.type);
+                    newShape.setText(textArea.getText());
+                    newShape.setColor(this.paintColor);
+                    shapes.put(start, newShape);
+                    try {
+                        server.updateShapes(start, newShape);
+                    } catch (RemoteException error) {
+                        error.printStackTrace();
+                        JOptionPane.showMessageDialog(null, e + ", please try again later",
+                                "Error", JOptionPane.ERROR_MESSAGE);
+                        System.exit(1);
+                    }
+                }
                 this.remove(panel);
                 this.validate();
                 this.repaint();
-                try {
-                    server.updateShapes(start, newShape);
-                } catch (RemoteException error) {
-                    error.printStackTrace();
-                    JOptionPane.showMessageDialog(null, e + ", please try again later",
-                            "Error", JOptionPane.ERROR_MESSAGE);
-                    System.exit(1);
-                }
             });
         }
 
