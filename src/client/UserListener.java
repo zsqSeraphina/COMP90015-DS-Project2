@@ -5,6 +5,7 @@ import src.server.IWhiteBoardServant;
 
 import javax.swing.*;
 import java.rmi.RemoteException;
+import java.rmi.UnmarshalException;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -85,7 +86,12 @@ public class UserListener implements Runnable {
                 }
             } catch (RemoteException e) {
                 e.printStackTrace();
-                JOptionPane.showMessageDialog(null, e + ", please try again later",
+                JOptionPane.showMessageDialog(null,  "Server closed, please try again later",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null,  e + ", please try again later",
                         "Error", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }

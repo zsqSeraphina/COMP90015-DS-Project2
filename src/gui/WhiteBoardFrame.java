@@ -150,6 +150,9 @@ public class WhiteBoardFrame extends JFrame {
                 server.setCanvasClosed(false);
             } catch (RemoteException ex) {
                 ex.printStackTrace();
+                JOptionPane.showMessageDialog(null, e + ", please try again later",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
             FileHandler.openFile(server);
         });

@@ -55,6 +55,10 @@ public class CandidateListener implements Runnable {
             }
         } catch (RemoteException e) {
             e.printStackTrace();
+            JOptionPane.showMessageDialog(null,
+                    "The manager rejected your request!",
+                    "Rejected", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
         }
     }
 }
